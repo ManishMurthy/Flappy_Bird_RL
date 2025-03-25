@@ -1,16 +1,8 @@
 {
-    "latex-workshop.latex.recipes": [
-        {
-            "name": "pdfLaTeX",
-            "tools": [
-                "pdflatex"
-            ]
-        }
-    ],
     "latex-workshop.latex.tools": [
         {
             "name": "pdflatex",
-            "command": "pdflatex",
+            "command": "/Library/TeX/texbin/pdflatex",
             "args": [
                 "-synctex=1",
                 "-interaction=nonstopmode",
@@ -19,5 +11,14 @@
             ]
         }
     ],
-    "latex-workshop.latex.autoBuild.run": "onSave"
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "pdfLaTeX",
+            "tools": [
+                "pdflatex"
+            ]
+        }
+    ],
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "latex-workshop.latex.autoBuild.interval": 1000
 }
