@@ -7,7 +7,7 @@ import os
 def train_flappy_bird():
     # Create environment
     env = FlappyBirdEnv()
-    state_size = 5  # size of our state vector
+    state_size = 3  # size of our state vector
     action_size = 2  # flap or do nothing
     batch_size = 32
     
@@ -49,8 +49,9 @@ def train_flappy_bird():
             total_reward += reward
             
             if done:
-                print(f"Episode: {e+1}/{n_episodes}, Score: {info['score']}, Reward: {total_reward:.2f}, Epsilon: {agent.epsilon:.2f}")
-                scores.append(info['score'])
+                print(f"Episode: {e+1}/{n_episodes}, Score: {info.get('score', 0)}, Reward: {total_reward:.2f}, Epsilon: {agent.epsilon:.2f}")
+                scores.append(info.get('score', 0))
+                print(f"Info dictionary keys: {info.keys()}")
                 break
                 
             # Train the agent with batches of experiences
