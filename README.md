@@ -1,3 +1,11 @@
-# Flappy Bird Deep Reinforcement Learning
+Play Flappy Bird Using Deep Reinforcement Learning
+Overview
+This project implements a Deep Q-Network (DQN) agent that learns to play Flappy Bird through reinforcement learning. The agent learns by interacting with the environment, receiving rewards for staying alive and passing through pipes, and penalties for crashing.
+Features
 
-This project implements a Deep Reinforcement Learning (DRL) agent to autonomously play Flappy Bird using Deep Q-Networks (DQN).
+Pygame-based Flappy Bird environment
+Deep Q-Network (DQN) implementation
+Experience replay for stable learning
+Epsilon-greedy exploration strategy
+Visualization of training progress
+Saved model checkpoints
