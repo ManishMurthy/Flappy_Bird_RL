@@ -31,7 +31,7 @@ def main():
         print("Training completed!")
         
     elif args.mode == 'test':
-        from test import test_trained_agent
+        from src.test import test_trained_agent
         if os.path.exists(args.model):
             print(f"Testing agent with model: {args.model}")
             print(f"Using {'simple graphics' if not use_assets else 'game assets'}")
