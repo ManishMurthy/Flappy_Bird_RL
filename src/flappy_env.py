@@ -13,7 +13,7 @@ class FlappyBirdEnv:
         self.bird_width = 34
         self.bird_height = 24
         self.use_assets = use_assets
-        
+
         # Initialize pygame
         pygame.init()
         self.screen = pygame.display.set_mode((self.width, self.height))
@@ -158,7 +158,6 @@ class FlappyBirdEnv:
         """
         Take action in the environment:
         action: 0 = do nothing, 1 = flap
-        Returns: (observation, reward, done, info)
         """
         reward = 0.2  # Small reward for staying alive
         

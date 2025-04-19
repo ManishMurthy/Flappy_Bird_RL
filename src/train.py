@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import torch
-from flappy_env import FlappyBirdEnv
+from src.flappy_env import FlappyBirdEnv
 from dqn_agent import DQNAgent
 import time
 import os
@@ -105,7 +105,7 @@ def train_dqn_agent(episodes=1000, use_assets=True):
     plt.ylabel('Epsilon')
     
     plt.tight_layout()
-    plt.savefig('training_results.png')
+    plt.savefig('figures/training_results.png', dpi=300)
     plt.show()
     
     return agent
