@@ -105,7 +105,7 @@ def train_dqn_agent(episodes=1000, use_assets=True):
     plt.ylabel('Epsilon')
     
     plt.tight_layout()
-    plt.savefig('figures/training_results.png', dpi=300)
+    plt.savefig('training_results.png')
     plt.show()
     
     return agent
