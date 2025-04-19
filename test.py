@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import time
-from src.flappy_env import FlappyBirdEnv
+from flappy_env import FlappyBirdEnv
 from dqn_agent import DQNAgent
 
 def test_trained_agent(model_path='models/flappy_dqn_final.pt', use_assets=True):

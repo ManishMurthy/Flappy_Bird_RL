@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import torch
-from src.flappy_env import FlappyBirdEnv
+from flappy_env import FlappyBirdEnv
 from dqn_agent import DQNAgent
 import time
 import os
