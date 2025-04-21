@@ -1,0 +1,108 @@
+import pygame
+import os
+import time
+import numpy as np
+import matplotlib.pyplot as plt
+from flappy_env import FlappyBirdEnv
+
+# Create directory for figures if it doesn't exist
+os.makedirs('figures', exist_ok=True)
+
+# Make sure PyGame doesn't try to create a visible window
+os.environ['SDL_VIDEODRIVER'] = 'dummy'
+
+# Initialize the environment
+env = FlappyBirdEnv(use_assets=True)
+state = env.reset()
+
+# Instead of trying to capture screenshots directly from PyGame,
+# let's manually create figures that represent the game state
+
+# Create a figure showing the state representation
+plt.figure(figsize=(10, 8))
+
+# Draw a background
+plt.fill_between([0, 288], [0, 0], [512, 512], color='skyblue', alpha=0.3)
+
+# Draw the ground
+plt.fill_between([0, 288], [450, 450], [512, 512], color='tan')
+
+# Draw pipes (example positions, replace with actual positions from your environment)
+pipe_x = 150
+gap_center = 250
+gap_height = 100
+plt.fill_between([pipe_x, pipe_x + 52], [0, 0], [gap_center - gap_height/2, gap_center - gap_height/2], 
+                color='green', alpha=0.7)
+plt.fill_between([pipe_x, pipe_x + 52], [gap_center + gap_height/2, gap_center + gap_height/2], 
+                [512, 512], color='green', alpha=0.7)
+
+# Draw another pipe further away
+pipe_x2 = 300
+plt.fill_between([pipe_x2, pipe_x2 + 52], [0, 0], [gap_center - 30 - gap_height/2, gap_center - 30 - gap_height/2], 
+                color='green', alpha=0.7)
+plt.fill_between([pipe_x2, pipe_x2 + 52], [gap_center - 30 + gap_height/2, gap_center - 30 + gap_height/2], 
+                [512, 512], color='green', alpha=0.7)
+
+# Draw bird
+bird_x, bird_y = 100, 200
+plt.scatter([bird_x], [bird_y], s=300, color='yellow', zorder=5)
+
+# Add score
+plt.text(10, 30, "Score: 2", fontsize=16, bbox=dict(facecolor='white', alpha=0.7))
+
+# Add title and labels
+plt.title('Flappy Bird Environment', fontsize=16)
+plt.xlim(0, 288)
+plt.ylim(512, 0)  # Invert y-axis to match game coordinates
+plt.axis('off')
+
+plt.tight_layout()
+plt.savefig('figures/flappy_environment.png', dpi=300, bbox_inches='tight')
+plt.close()
+
+print("Generated environment illustration saved!")
+
+# Create a second figure showing the bird passing through a pipe
+plt.figure(figsize=(10, 8))
+
+# Draw a background
+plt.fill_between([0, 288], [0, 0], [512, 512], color='skyblue', alpha=0.3)
+
+# Draw the ground
+plt.fill_between([0, 288], [450, 450], [512, 512], color='tan')
+
+# Draw pipes
+pipe_x = 80  # Bird is passing through this pipe
+gap_center = 250
+gap_height = 100
+plt.fill_between([pipe_x, pipe_x + 52], [0, 0], [gap_center - gap_height/2, gap_center - gap_height/2], 
+                color='green', alpha=0.7)
+plt.fill_between([pipe_x, pipe_x + 52], [gap_center + gap_height/2, gap_center + gap_height/2], 
+                [512, 512], color='green', alpha=0.7)
+
+# Draw another pipe further away
+pipe_x2 = 230
+plt.fill_between([pipe_x2, pipe_x2 + 52], [0, 0], [gap_center + 30 - gap_height/2, gap_center + 30 - gap_height/2], 
+                color='green', alpha=0.7)
+plt.fill_between([pipe_x2, pipe_x2 + 52], [gap_center + 30 + gap_height/2, gap_center + 30 + gap_height/2], 
+                [512, 512], color='green', alpha=0.7)
+
+# Draw bird passing through pipe
+bird_x, bird_y = 90, gap_center
+plt.scatter([bird_x], [bird_y], s=300, color='yellow', zorder=5)
+
+# Add score with animation to show it just increased
+plt.text(10, 30, "Score: 3", fontsize=16, bbox=dict(facecolor='white', alpha=0.7))
+plt.text(105, 100, "+1", fontsize=18, color='green', fontweight='bold')
+
+# Add title and labels
+plt.title('Flappy Bird - Passing Through Pipe', fontsize=16)
+plt.xlim(0, 288)
+plt.ylim(512, 0)  # Invert y-axis to match game coordinates
+plt.axis('off')
+
+plt.tight_layout()
+plt.savefig('figures/flappy_passing_pipe.png', dpi=300, bbox_inches='tight')
+plt.close()
+
+print("Generated pipe-passing illustration saved!")
