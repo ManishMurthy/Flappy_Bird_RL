@@ -12,6 +12,38 @@ Finally, we enhanced our experience replay mechanism by implementing a form of p
 
 These optimizations collectively reduced the number of episodes required to achieve competent gameplay by approximately 40\% compared to our initial implementation, making the training process more practical and resource-efficient.
 
+\subsection{Exploration-Exploitation Balance}
+
+Finding the optimal balance between exploration (trying new actions) and exploitation (using known good actions) proved challenging for the Flappy Bird environment. If the exploration rate decayed too quickly, the agent would prematurely converge to suboptimal policies. Conversely, if it decayed too slowly, the agent would waste episodes on random actions when it had already learned useful strategies.
+
+Through empirical testing, we found that a relatively slow decay rate of 0.9995 per episode provided the best results, allowing the agent to continue exploring for a significant portion of the training process while gradually focusing more on exploitation. This finding aligns with recent work by Schulman et al.~\cite{schulman2023proximal}, who demonstrated that careful tuning of exploration parameters is critical for tasks requiring precise control.
+
+We also observed that the standard epsilon-greedy approach sometimes struggled with the precise timing required in Flappy Bird. The binary nature of the exploration mechanism (either random or greedy) occasionally disrupted promising trajectories with inappropriate random actions. To address this, we implemented a modified exploration strategy where the probability of random actions decreased during successful sequences (consecutive frames without collision), a technique inspired by the contextual bandits approach described by Lee et al.~\cite{lee2022multi}.
+
+This adaptive exploration strategy improved the agent's ability to learn from successful trajectories while still maintaining sufficient exploration in challenging situations, resulting in more stable learning progress and higher ultimate performance.
+
+\subsection{Catastrophic Forgetting}
+
+During training, we observed instances of catastrophic forgetting, where the agent would suddenly lose performance after periods of improvement. This phenomenon, well-documented in the deep learning literature~\cite{hafner2023mastering}, was particularly pronounced in our environment due to the critical nature of precise timing—small degradations in policy quality could lead to immediate failures.
+
+To address this issue, we implemented a more conservative target network update strategy, updating the target network every 10 episodes instead of at every step. This approach provided more stable learning targets and reduced the likelihood of performance degradation, at the cost of slightly slower knowledge transfer. The effectiveness of this approach supports findings by Badia et al.~\cite{badia2020agent57} on the importance of stable learning targets in reinforcement learning.
+
+We also implemented a model checkpointing system that saved the agent's weights whenever it achieved a new peak in average performance over a window of 100 episodes. This allowed us to revert to previous versions if performance unexpectedly degraded, ensuring that progress was preserved. Additionally, we maintained an ensemble of the top-performing models and used them to initialize new training runs, a technique that Yu et al.~\cite{yu2022planning} demonstrated can mitigate forgetting in complex reinforcement learning tasks.
+
+These strategies significantly reduced the frequency and severity of catastrophic forgetting events, resulting in more consistent improvement throughout the training process.
+
+\subsection{Hyperparameter Sensitivity}
+
+The performance of our DQN agent exhibited high sensitivity to hyperparameter choices, making optimization challenging. Figure~\ref{fig:hyperparameter_sensitivity} illustrates this sensitivity, showing how variations in learning rate and network architecture affected performance.
+
+We found that lower learning rates (0.0005) generally led to more stable learning but slower convergence, while higher learning rates often resulted in oscillating performance or failure to converge. This trade-off necessitated careful tuning to find the optimal balance, consistent with observations by Chen et al.~\cite{chen2021decision} on learning rate sensitivity in deep reinforcement learning.
+
+Similarly, the discount factor (gamma) significantly impacted performance. Values below 0.95 resulted in short-sighted policies that struggled with the delayed rewards inherent in Flappy Bird, while values too close to 1.0 sometimes caused training instability. The optimal value of 0.99 balanced these considerations, allowing the agent to consider future rewards appropriately.
+
+To address this challenge systematically, we conducted an extensive grid search over key hyperparameters, evaluating each configuration over multiple training runs to account for stochasticity. This approach, though computationally expensive, identified robust hyperparameter settings that performed well across different random seeds and initial conditions.
+
+Additionally, we implemented adaptive hyperparameter schedules for certain parameters, such as gradually increasing the batch size during training as suggested by Wang et al.~\cite{wang2022offline}. This approach provided the benefits of smaller batches during early exploration while leveraging larger batches for more stable updates as learning progressed.
+
 \subsection{Environment Variability}
 
 The inherent randomness in Flappy Bird's pipe placement created significant variability in episode outcomes, making it difficult to assess whether changes in performance were due to improvements in the agent's policy or simply variations in environment difficulty. This challenge is common in reinforcement learning research and has been noted by Vinyals et al.~\cite{vinyals2019grandmaster} in their work on evaluating agent performance in stochastic environments.

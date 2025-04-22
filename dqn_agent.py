@@ -37,7 +37,7 @@ class DQNAgent:
         self.learning_rate = 0.0005  # Learning rate
         
         # Memory for experience replay
-        self.memory = deque(maxlen=10000)
+        self.memory = deque(maxlen=50000)
         
         # Build the neural network model
         self.model = DQNNetwork(state_size, action_size).to(self.device)
