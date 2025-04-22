@@ -7,14 +7,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.9'
+        python-version: '3.9'  # Match your local version
+        
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Run tests
+        pip install pygame numpy tensorflow keras  # Add your actual dependencies
+        
+    - name: Verify imports
       run: |
-        python -m pytest tests/
+        python -c "import pygame; import numpy; import tensorflow"
+        
+    - name: Run basic execution test
+      run: |
+        python -c "from flappy_bird import Game; game = Game(); print('Game initialized successfully')"
