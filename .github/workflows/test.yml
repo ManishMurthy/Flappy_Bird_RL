@@ -1,4 +1,4 @@
-name: Flappy Bird CI
+name: Flappy Bird
 
 on: [push, pull_request]
 
@@ -21,8 +21,7 @@ jobs:
 
     - name: Run basic environment tests
       run: |
-        python -c "
-        from flappy_env import FlappyBirdEnv
+        python -c "from flappy_env import FlappyBirdEnv
         env = FlappyBirdEnv(use_assets=False)
         obs = env.reset()
         print(f'Observation shape: {obs.shape}')
@@ -32,24 +31,21 @@ jobs:
             obs, reward, done, _ = env.step(action)
             if done: break
         print('Basic environment test passed!')
-        env.close()
-        "
+        env.close()"
 
     - name: Run DQN agent test (skip if no model)
       run: |
         if [ -f "models/flappy_dqn_final.pt" ]; then
-          python -c "
-          from flappy_env import FlappyBirdEnv
-          from dqn_agent import DQNAgent
-          import torch
-          device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-          agent = DQNAgent(5, 2, device=device)
-          try:
-              agent.load('models/flappy_dqn_final.pt')
-              print('DQN agent test passed!')
-          except Exception as e:
-              print(f'DQN agent test failed: {e}')
-          "
+          python -c "from flappy_env import FlappyBirdEnv
+from dqn_agent import DQNAgent
+import torch
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+agent = DQNAgent(5, 2, device=device)
+try:
+    agent.load('models/flappy_dqn_final.pt')
+    print('DQN agent test passed!')
+except Exception as e:
+    print(f'DQN agent test failed: {e}')"
         else
           echo "No model found, skipping DQN test"
         fi
