@@ -6,7 +6,7 @@ from dqn_agent import DQNAgent
 import time
 import os
 
-def train_dqn_agent(episodes=1000, use_assets=True):
+def train_dqn_agent(episodes=3000, use_assets=True):
     # Check if CUDA is available
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
