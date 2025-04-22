@@ -1,4 +1,4 @@
-name: Python Tests
+name: Flappy Bird RL Tests
 
 on: [push, pull_request]
 
@@ -8,20 +8,61 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Set up Python
+    - name: Set up Python 3.9
       uses: actions/setup-python@v4
       with:
-        python-version: '3.9'  # Match your local version
+        python-version: '3.9'
         
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pygame numpy tensorflow keras  # Add your actual dependencies
+        pip install pygame numpy
         
-    - name: Verify imports
+    - name: Verify environment imports
       run: |
-        python -c "import pygame; import numpy; import tensorflow"
+        python -c "import pygame; import numpy; from collections import deque; import os"
         
-    - name: Run basic execution test
+    - name: Create test script
       run: |
-        python -c "from flappy_bird import Game; game = Game(); print('Game initialized successfully')"
+        cat << 'EOF' > test_flappy.py
+        from flappy_env import FlappyBirdEnv
+        import numpy as np
+        
+        def test_environment():
+            # Test initialization
+            env = FlappyBirdEnv(use_assets=False)
+            assert env.width == 288
+            assert env.height == 512
+            
+            # Test reset
+            obs = env.reset()
+            assert isinstance(obs, np.ndarray)
+            assert obs.shape == (5,)
+            
+            # Test step
+            obs, reward, done, info = env.step(0)  # Do nothing
+            assert isinstance(obs, np.ndarray)
+            assert isinstance(reward, float)
+            assert isinstance(done, bool)
+            assert isinstance(info, dict)
+            
+            # Test multiple steps
+            for _ in range(10):
+                obs, reward, done, info = env.step(np.random.randint(0, 2))
+                if done:
+                    break
+            
+            print("All basic environment tests passed!")
+            
+        if __name__ == "__main__":
+            test_environment()
+        EOF
+        
+    - name: Run environment tests
+      run: |
+        python test_flappy.py
+        
+    - name: Check code formatting
+      run: |
+        pip install black
+        black --check flappy_env.py
