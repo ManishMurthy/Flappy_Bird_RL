@@ -2,7 +2,7 @@
 
 \subsection{Learning Performance}
 
-The learning performance of our DQN agent on the Flappy Bird environment exhibited a clear progression through distinguishable phases. Figure \ref{fig:learning_curve} presents the learning curves showing the episode rewards and exploration rate (epsilon) throughout the training process. The agent's performance, measured by both episode rewards and game scores (number of pipes passed), demonstrated significant improvement over the course of training.
+The learning performance of our DQN agent on the Flappy Bird environment exhibited a clear progression through distinguishable phases. Figure \ref{fig:learning_curves} presents the learning curves showing the episode rewards and exploration rate (epsilon) throughout the training process. The agent's performance, measured by both episode rewards and game scores (number of pipes passed), demonstrated significant improvement over the course of training.
 
 During the initial exploration phase (approximately episodes 1-200), the agent performed poorly as it primarily selected random actions with a high epsilon value. The average reward during this phase was 2.3, corresponding to an average score of 0.4 pipes passed per episode. This baseline performance established the difficulty of the task and the ineffectiveness of random action selection.
 
@@ -11,6 +11,12 @@ The second phase (episodes 200-500) showed rapid improvement as the agent accumu
 The final phase (episodes 500-1000) exhibited continued but more gradual improvement as the agent refined its policy. The learning curve showed periodic fluctuations, consistent with the stochastic nature of reinforcement learning and the varying difficulty of randomly generated pipe configurations. By the end of training, the agent achieved an average reward of 18.4 and an average score of 15.7 pipes per episode, representing a significant improvement over both random play and the early stages of learning.
 
 The variance in performance decreased as training progressed, indicating more consistent behavior from the agent. This aligns with findings from Dabney et al. \cite{dabney2020distributional}, who demonstrated that well-trained reinforcement learning agents develop stable, reliable policies as they accumulate experience. The final stages of training showed occasional exceptional performances, with some episodes achieving scores above 30, suggesting that the agent had developed an effective strategy for navigating the environment.
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{/Users/admin/GitHUb/Flappy_Bird_RL/Flappy_Bird_RL/Figures/learning_curves.png}
+\caption{Learning progress over 1000 episodes showing three distinct phases: initial exploration (episodes 1-200), rapid improvement (episodes 200-500), and policy refinement (episodes 500-1000). The agent's performance stabilizes with occasional fluctuations due to environment stochasticity.}
+\label{fig:learning_curves}
+\end{figure}
 
 \subsection{Comparative Performance}
 
@@ -50,6 +56,19 @@ The decision boundary exhibits interesting nonlinearities, particularly near the
 We also analyzed the agent's behavior in challenging scenarios, such as navigating through consecutive pipes at different heights. The agent demonstrated adaptive strategies, sometimes sacrificing optimal positioning for one pipe to better prepare for the next, suggesting a degree of multi-step planning. This behavior aligns with recent findings by Hafner et al. \cite{hafner2023mastering} on the emergence of planning capabilities in reinforcement learning agents.
 
 The activation patterns in the neural network's hidden layers revealed specialized neurons that respond to specific environmental features, such as the distance to the next pipe or the relative position within the gap. This specialization enables the network to extract relevant information from the state representation efficiently, consistent with findings from Yu et al. \cite{yu2022planning} on feature extraction in deep reinforcement learning.
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{/Users/admin/GitHUb/Flappy_Bird_RL/Flappy_Bird_RL/Figures/decision_boundary.png}
+\caption{Visualization of the agent's learned policy decision boundary. Blue regions indicate states where the agent chooses to flap, while red regions indicate states where it chooses to do nothing. The complex boundary demonstrates the agent's sophisticated understanding of the game physics.}
+\label{fig:decision_boundary}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{/Users/admin/GitHUb/Flappy_Bird_RL/Flappy_Bird_RL/Figures/flappy_passing_pipe.png}
+\caption{The agent successfully passing through a pipe and receiving a +1 reward. This visualization demonstrates how the agent has learned to time its flapping to navigate through the pipe gaps.}
+\label{fig:passing_pipe}
+\end{figure}
 
 \subsection{Ablation Studies}
 

@@ -104,7 +104,9 @@ def train_dqn_agent(episodes=3000, use_assets=True):
     plt.xlabel('Episode')
     plt.ylabel('Epsilon')
     
+    os.makedirs("figures", exist_ok=True)  # Add this line
     plt.tight_layout()
+    plt.plot(scores)
     plt.savefig('figures/training_results.png', dpi=300)
     plt.show()
     
