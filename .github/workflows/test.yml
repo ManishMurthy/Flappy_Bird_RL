@@ -1,4 +1,4 @@
-name: Flappy Bird DQN Training
+name: Flappy Bird DQN Training & Testing
 
 on:
   push:
@@ -7,13 +7,13 @@ on:
     branches: [ "main" ]
 
 jobs:
-  setup_and_train:
+  train:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       
       # Install system dependencies
-      - name: Install SDL2 and other system packages
+      - name: Install SDL2 dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -22,64 +22,45 @@ jobs:
             libsdl2-dev \
             libsdl2-image-dev \
             libsdl2-mixer-dev \
-            libsdl2-ttf-dev \
-            libportmidi-dev \
-            libswscale-dev \
-            libavformat-dev \
-            libavcodec-dev \
-            zlib1g-dev
+            libsdl2-ttf-dev
       
-      # Set up Python
-      - name: Set up Python 3.9
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
       
-      # Install Python dependencies
       - name: Install Python packages
         run: |
-          python -m pip install --upgrade pip
-          pip install wheel setuptools
           pip install -r requirements.txt
       
-      # Train the model
       - name: Train DQN Agent
-        run: python train.py --episodes 5000 --batch_size 32 --lr 0.0001 --gamma 0.99
+        run: python train.py --episodes 3000 --batch_size 32 --lr 0.0001 --gamma 0.99
       
-      # Save artifacts
-      - name: Upload Model
+      - name: Save trained model
         uses: actions/upload-artifact@v4
         with:
-          name: dqn-model
+          name: trained-model
           path: models/dqn_flappy_bird.pth
-      - name: Upload Training Plot
-        uses: actions/upload-artifact@v4
-        with:
-          name: training-plot
-          path: results/training_plot.png
 
-  evaluate:
-    needs: setup_and_train
+  test:
+    needs: train
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       
-      # Download trained model
-      - name: Download Model
+      - name: Download model
         uses: actions/download-artifact@v4
         with:
-          name: dqn-model
+          name: trained-model
           path: models/
       
-      # Evaluate
-      - name: Evaluate Agent
-        run: python evaluate.py --model_path models/dqn_flappy_bird.pth --eval_episodes 100
+      - name: Run tests
+        run: python test.py --model_path models/dqn_flappy_bird.pth
       
-      # Save evaluation results
-      - name: Upload Results
+      - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
-          name: evaluation-results
+          name: test-results
           path: |
-            results/evaluation_scores.txt
-            results/gameplay_recording.mp4
+            test_output/
+            test_logs.txt
