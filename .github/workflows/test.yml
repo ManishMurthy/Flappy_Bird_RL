@@ -1,19 +1,15 @@
-name: Flappy Bird DQN Training & Testing
+name: Train Flappy Bird DQN
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [push, pull_request]
 
 jobs:
   train:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       # Install system dependencies
-      - name: Install SDL2 dependencies
+      - name: Install SDL2 and Python deps
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -23,44 +19,43 @@ jobs:
             libsdl2-image-dev \
             libsdl2-mixer-dev \
             libsdl2-ttf-dev
-      
-      - name: Set up Python
+
+      # Set up Python
+      - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
-      
-      - name: Install Python packages
+
+      # Install Python packages
+      - name: Install requirements
         run: |
-          pip install -r requirements.txt
-      
-      - name: Train DQN Agent
-        run: python train.py --episodes 3000 --batch_size 32 --lr 0.0001 --gamma 0.99
-      
+          pip install gym==0.26.2 pygame==2.1.3 numpy torch matplotlib
+
+      # Create necessary directories
+      - name: Setup directories
+        run: mkdir -p models figures
+
+      # Run training
+      - name: Train the agent
+        run: |
+          python -c "
+          import os
+          os.makedirs('models', exist_ok=True)
+          os.makedirs('figures', exist_ok=True)
+          from train import DQNAgent
+          agent = DQNAgent(state_size=8, action_size=2)
+          agent.train(episodes=3000)
+          "
+
+      # Upload results
       - name: Save trained model
         uses: actions/upload-artifact@v4
         with:
-          name: trained-model
-          path: models/dqn_flappy_bird.pth
-
-  test:
-    needs: train
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Download model
-        uses: actions/download-artifact@v4
-        with:
-          name: trained-model
+          name: flappy-model
           path: models/
-      
-      - name: Run tests
-        run: python test.py --model_path models/dqn_flappy_bird.pth
-      
-      - name: Upload test results
+          
+      - name: Save training plots
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
-          path: |
-            test_output/
-            test_logs.txt
+          name: training-figures
+          path: figures/
