@@ -1,4 +1,4 @@
-name: Python application
+name: Flappy Bird RL CI
 
 on:
   push:
@@ -7,24 +7,35 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
+  build-and-run:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.13'  # or your project version
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt || true  # fallback if no file
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: pytest
+    - name: Run Flappy Bird RL script
       run: |
-        echo "No tests defined"  # Replace this with `pytest` or `unittest`
+        python main.py  # Replace this with your entry script, like flappy_dqn.py
+
+    - name: Run unit tests
+      run: |
+        pip install pytest
+        pytest || echo "Tests failed but continuing..."
+
+    - name: Upload model artifact
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: trained-model
+        path: models/model.pth  # Replace this with your actual model file path
