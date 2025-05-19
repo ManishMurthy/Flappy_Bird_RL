@@ -12,3 +12,5 @@ Saved model checkpoints
 
 
 [![Flappy Bird RL CI](https://github.com/ManishMurthy/Flappy_Bird_RL/actions/workflows/python-app.yml/badge.svg)](https://github.com/ManishMurthy/Flappy_Bird_RL/actions/workflows/python-app.yml)
+![Python](https://img.shields.io/badge/python-3.11-blue.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
