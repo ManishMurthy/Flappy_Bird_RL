@@ -9,3 +9,6 @@ Experience replay for stable learning
 Epsilon-greedy exploration strategy
 Visualization of training progress
 Saved model checkpoints
+
+
+[![Flappy Bird RL CI](https://github.com/ManishMurthy/Flappy_Bird_RL/actions/workflows/python-app.yml/badge.svg)](https://github.com/ManishMurthy/Flappy_Bird_RL/actions/workflows/python-app.yml)
